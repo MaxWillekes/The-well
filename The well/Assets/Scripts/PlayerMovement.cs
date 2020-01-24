@@ -32,8 +32,30 @@ public class PlayerMovement : MonoBehaviour
         body.transform.rotation = Quaternion.Euler(-angleY + 0, angleX + 180, +0);
 
         HookPivot.transform.rotation = Quaternion.Euler(-angleY + 0, angleX + 180, +0);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+            if (Physics.Raycast(ray, out hit, 100.0f))
+            {
+                Debug.Log("You selected the " + hit.transform.name);
+
+                try
+                {
+                    hit.transform.GetComponent<ClickableInteraction>().Interact();
+                }
+                catch
+                {
+                    Debug.Log("Object clicked doesnt have an ClickableInteraction script. Continuing as normal.");
+                }
+            }
+        }
     }
 
+    /* 
+     *  Going to keep this part around for later development
+     *  
     void OnCollisionEnter(Collision col)
     {
         // Reloading the scene when you've fallen off the level.
@@ -42,4 +64,5 @@ public class PlayerMovement : MonoBehaviour
             SceneManager.LoadScene("Level");
         }
     }
+    */
 }
